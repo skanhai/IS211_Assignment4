@@ -4,7 +4,7 @@ import random
 
 def get_me_random_list(n):
     """Generate list of n elements in random order
-    
+
     :params: n: Number of elements in the list
     :returns: A list with n elements in random order
     """
@@ -42,7 +42,7 @@ def ordered_sequential_search(a_list, item):
     return found
 
 
-def binary_search_iterative(a_list,item):
+def binary_search_iterative(a_list, item):
     first = 0
 
     last = len(a_list) - 1
@@ -58,9 +58,9 @@ def binary_search_iterative(a_list,item):
                 first = midpoint + 1
 
     return found
-    
-    
-def binary_search_recursive(a_list,item):
+
+
+def binary_search_recursive(a_list, item):
     if len(a_list) == 0:
         return False
     else:
@@ -74,20 +74,40 @@ def binary_search_recursive(a_list,item):
                 return binary_search_recursive(a_list[midpoint + 1:], item)
 
 
-if __name__ == "__main__":
-    """Main entry point"""
-    the_size = 500
-
+def timed_search_function(search_func, the_size):
     total_time = 0
     for i in range(100):
         mylist = get_me_random_list(the_size)
-        # sorting is not needed for sequential search.
         mylist = sorted(mylist)
 
         start = time.time()
-        check = binary_search_iterative(mylist, 99999999)
+        search_func(mylist, 99999999)
         time_spent = time.time() - start
         total_time += time_spent
 
     avg_time = total_time / 100
-    print(f"Binary Search Iterative took {avg_time:10.7f} seconds to run, on average for a list of {the_size} elements")
+    return avg_time
+
+
+if __name__ == "__main__":
+    list_sizes = [500, 1000, 5000]
+
+    for size in list_sizes:
+        avg_time_sequential = timed_search_function(sequential_search, size)
+        print(
+            f"Sequential Search took {avg_time_sequential:10.7f} seconds to run, on average for a list of {size} elements")
+
+        avg_time_ordered_sequential = timed_search_function(ordered_sequential_search, size)
+        print(
+            f"Ordered Sequential Search took {avg_time_ordered_sequential:10.7f} seconds to run, on average for a list of {size} elements")
+
+        avg_time_iterative_binary = timed_search_function(binary_search_iterative, size)
+        print(
+            f"Binary Search Iterative took {avg_time_iterative_binary:10.7f} seconds to run, on average for a list of {size} elements")
+
+        avg_time_recursive_binary = timed_search_function(binary_search_recursive, size)
+        print(
+            f"Binary Search Recursive took {avg_time_recursive_binary:10.7f} seconds to run, on average for a list of {size} elements")
+
+
+
